@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>数萃报道</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7.min.css">
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current" id="home">
+        <header class="bar bar-nav">
+            <h1 class="title">欢迎来到数萃</h1>
+        </header>
+        <div class="content">
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">姓名</div>
+                                <div class="item-input">
+                                    <input type="text" placeholder="请输入您的姓名">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block">
+                <a href="#info" class="button button-big button-fill button-success">下一步</a>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="info">
+        <header class="bar bar-nav">
+            <h1 class='title'>请确认您的信息</h1>
+        </header>
+        <div class="content">
+            <div class="content-block-title">个人信息</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">姓名</div>
+                            <div class="item-after" id="stu_name">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">电话</div>
+                            <div class="item-after" id="stu_phone">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">邮箱</div>
+                            <div class="item-after" id="stu_email">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">单位</div>
+                            <div class="item-after" id="stu_unit">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">工作</div>
+                            <div class="item-after" id="stu_job">nil</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">费用信息</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">折扣</div>
+                            <div class="item-after" id="discount">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">模块</div>
+                            <div class="item-after" id="module">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">价格</div>
+                            <div class="item-after" id="price">nil</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">发票信息</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">发票类型</div>
+                            <div class="item-after" id="invoice_type">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">发票抬头</div>
+                            <div class="item-after" id="invoice_title">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">开票项目</div>
+                            <div class="item-after" id="invoice_item">nil</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">税号</div>
+                            <div class="item-after" id="tax_no">nil</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="div_vat">
+                <div class="content-block-title">增值税专用发票信息</div>
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-content-inner" id="vat_invoice">
+                            这是一个用纯文本的简单卡片。但卡片可以包含自己的页头，页脚，列表视图，图像，和里面的任何元素。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-block">
+                <div class="row">
+                    <div class="col-50"><a href="#home" class="button button-big button-fill button-danger back">返回</a>
+                    </div>
+                    <div class="col-50"><a href="#checkin" class="button button-big button-fill button-success">下一步</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="checkin">
+        <header class="bar bar-nav">
+            <h1 class="title">请认真填写以下信息</h1>
+        </header>
+        <div class="content">
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">24日晚饭</div>
+                                <div class="item-input">
+                                    <label class="label-switch">
+                                        <input type="checkbox">
+                                        <div class="checkbox"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block">
+                <div class="row">
+                    <div class="col-50"><a href="#info" class="button button-big button-fill button-danger back">返回</a>
+                    </div>
+                    <div class="col-50"><a href="#" class="button button-big button-fill button-success">签到</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' src='/static/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7.min.js' charset='utf-8'></script>
+<script>$.init()</script>
+</body>
+</html>
