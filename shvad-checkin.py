@@ -59,6 +59,8 @@ def info():
             for item in data:
                 if isinstance(data[item], str):
                     data[item] = data[item].strip().replace("\n", "<br/>")
+                    if data[item] == "":
+                        data[item] = "无"
             result["data"] = data
             result["ret"] = 1
         else:
