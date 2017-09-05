@@ -17,6 +17,34 @@ def index():
     return render_template('index.html')
 
 
+@app.route("/payment")
+def payment():
+    return render_template("payment.html")
+
+
+@app.route("/getpayment")
+def getpayment():
+    cur = DictCursor(mysql.get_db())
+    cur.execute("SELECT id,stu_name,discount,price FROM attend WHERE paid=0 AND attendance=1;")
+    return dumps(cur.fetchall(), ensure_ascii=False)
+
+
+@app.route("/confirmpayment", methods=["POST"])
+def confirmpayment():
+    cid = request.form.get("id")
+    if cid:
+        conn = mysql.get_db()
+        cur = conn.cursor()
+        cur.execute("UPDATE attend SET paid=1 WHERE id=%s;", cid)
+        conn.commit()
+        if cur.rowcount == 1:
+            return '{"ret": 1}'
+        else:
+            return '{"ret": -1}'
+    else:
+        return '{"ret": -2}'
+
+
 @app.route('/info', methods=["POST"])
 def info():
     stu_name = request.form.get("stu_name")

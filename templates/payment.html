@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>付费查询</title>
+    <link rel="stylesheet" href="/static/layui.css">
+</head>
+<body>
+<ul class="layui-nav">
+    <li class="layui-nav-item">数萃培训未交费名单</li>
+    <li class="layui-nav-item layui-layout-right">
+        <button class="layui-btn layui-btn-normal" onclick="refresh_data()">刷新</button>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+    </li>
+</ul>
+<div class="layui-container">
+    <table class="layui-table" id="app">
+        <colgroup>
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>姓名</th>
+            <th>折扣</th>
+            <th>价格</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="user in users">
+            <td v-text="user.stu_name"></td>
+            <td v-text="user.discount"></td>
+            <td v-text="user.price"></td>
+            <td>
+                <button class="layui-btn" v-bind:user-name="user.stu_name" v-bind:user-id="user.id" onclick="pay(this)">
+                    确认交费
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type='text/javascript' src='/static/vue.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/vue-resource.min.js' charset='utf-8'></script>
+<script type="text/javascript">
+    var refresh_data = function () {
+        Vue.http.get("/getpayment").then(function (response) {
+            app.users = response.body;
+        });
+    };
+    var pay = function (sender) {
+        if (confirm("确认 " + sender.getAttribute("user-name") + " 交费？")) {
+            Vue.http.post("/confirmpayment", {id: sender.getAttribute("user-id")}, {emulateJSON: true}).then(function (response) {
+                refresh_data()
+            })
+        }
+    };
+    var app = new Vue({
+        el: '#app',
+        data: {
+            users: []
+        },
+        mounted: refresh_data
+    })
+</script>
+</body>
+</html>
