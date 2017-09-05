@@ -140,39 +140,8 @@
                 <div class="row">
                     <div class="col-50"><a href="#home" class="button button-big button-fill button-danger back">返回</a>
                     </div>
-                    <div class="col-50"><a href="#checkin" class="button button-big button-fill button-success">下一步</a>
+                    <div class="col-50"><a href="#" class="button button-big button-fill button-success" id="btn_checkin">签到</a>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="page" id="checkin">
-        <header class="bar bar-nav">
-            <h1 class="title">请认真填写以下信息</h1>
-        </header>
-        <div class="content">
-            <div class="list-block">
-                <ul>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">24日晚饭</div>
-                                <div class="item-input">
-                                    <label class="label-switch">
-                                        <input type="checkbox">
-                                        <div class="checkbox"></div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="content-block">
-                <div class="row">
-                    <div class="col-50"><a href="#info" class="button button-big button-fill button-danger back">返回</a>
-                    </div>
-                    <div class="col-50"><a href="#" class="button button-big button-fill button-success">签到</a></div>
                 </div>
             </div>
         </div>
@@ -202,7 +171,7 @@
                     }
                     $.router.loadPage("#info");
                 } else {
-                    $.toast("未找到改用户");
+                    $.toast("未找到该用户");
                 }
             }, "json");
         } else {
