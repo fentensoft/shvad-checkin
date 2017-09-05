@@ -40,5 +40,21 @@ def info():
         return '{"ret": -1}'
 
 
+@app.route("/checkin", methods=["POST"])
+def checkin():
+    cid = request.form.get("id")
+    if cid:
+        conn = mysql.get_db()
+        cur = DictCursor(conn)
+        cur.execute("UPDATE attend SET attendance=1 WHERE id=%s;", cid)
+        conn.commit()
+        if cur.rowcount == 1:
+            return '{"ret": 1}'
+        else:
+            return '{"ret": -1}'
+    else:
+        return '{"ret": -1}'
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

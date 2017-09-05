@@ -164,7 +164,7 @@
                         $("#" + key).html(val);
                     });
                     if (data["data"]["vat_invoice"].trim() === "") {
-                        $("invoice_type").html("普通发票");
+                        $("#invoice_type").html("普通发票");
                         $("#div_vat").hide();
                     } else {
                         $("#invoice_type").html("专用发票");
@@ -178,6 +178,17 @@
             $.toast("请输入姓名");
         }
     });
+    $("#btn_checkin").on("click", function(){
+        $.showPreloader("加载中");
+        $.post("/checkin", {"id": cid}, function(data){
+            $.hidePreloader();
+            if (data["ret"] === 1) {
+                $.alert("签到成功，请关闭本页面")
+            } else {
+                $.toast("签到失败，请重试")
+            }
+        }, "json");
+    })
 </script>
 </body>
 </html>
