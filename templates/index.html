@@ -23,7 +23,8 @@
                             <div class="item-inner">
                                 <div class="item-title label">姓名</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请输入您的姓名">
+                                    <input type="text" placeholder="请输入您的姓名" id="input_stu_name">
+                                    <input type="hidden" id="id">
                                 </div>
                             </div>
                         </div>
@@ -31,7 +32,7 @@
                 </ul>
             </div>
             <div class="content-block">
-                <a href="#info" class="button button-big button-fill button-success">下一步</a>
+                <a href="#" class="button button-big button-fill button-success" id="btn_getinfo">下一步</a>
             </div>
         </div>
     </div>
@@ -46,31 +47,31 @@
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">姓名</div>
-                            <div class="item-after" id="stu_name">nil</div>
+                            <div class="item-after" id="stu_name"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">电话</div>
-                            <div class="item-after" id="stu_phone">nil</div>
+                            <div class="item-after" id="stu_phone"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">邮箱</div>
-                            <div class="item-after" id="stu_email">nil</div>
+                            <div class="item-after" id="stu_email"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">单位</div>
-                            <div class="item-after" id="stu_unit">nil</div>
+                            <div class="item-after" id="stu_unit"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
-                            <div class="item-title">工作</div>
-                            <div class="item-after" id="stu_job">nil</div>
+                            <div class="item-title">职务</div>
+                            <div class="item-after" id="stu_job"></div>
                         </div>
                     </li>
                 </ul>
@@ -81,19 +82,19 @@
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">折扣</div>
-                            <div class="item-after" id="discount">nil</div>
+                            <div class="item-after" id="discount"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">模块</div>
-                            <div class="item-after" id="module">nil</div>
+                            <div class="item-after" id="module"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">价格</div>
-                            <div class="item-after" id="price">nil</div>
+                            <div class="item-after" id="price"></div>
                         </div>
                     </li>
                 </ul>
@@ -104,25 +105,25 @@
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">发票类型</div>
-                            <div class="item-after" id="invoice_type">nil</div>
+                            <div class="item-after" id="invoice_type"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">发票抬头</div>
-                            <div class="item-after" id="invoice_title">nil</div>
+                            <div class="item-after" id="invoice_title"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">开票项目</div>
-                            <div class="item-after" id="invoice_item">nil</div>
+                            <div class="item-after" id="invoice_item"></div>
                         </div>
                     </li>
                     <li class="item-content">
                         <div class="item-inner">
                             <div class="item-title">税号</div>
-                            <div class="item-after" id="tax_no">nil</div>
+                            <div class="item-after" id="tax_no"></div>
                         </div>
                     </li>
                 </ul>
@@ -131,9 +132,7 @@
                 <div class="content-block-title">增值税专用发票信息</div>
                 <div class="card">
                     <div class="card-content">
-                        <div class="card-content-inner" id="vat_invoice">
-                            这是一个用纯文本的简单卡片。但卡片可以包含自己的页头，页脚，列表视图，图像，和里面的任何元素。
-                        </div>
+                        <div class="card-content-inner" id="vat_invoice"></div>
                     </div>
                 </div>
             </div>
@@ -181,6 +180,35 @@
 </div>
 <script type='text/javascript' src='/static/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7.min.js' charset='utf-8'></script>
-<script>$.init()</script>
+<script type="text/javascript">
+    var cid = -1;
+    $.init();
+    $("#btn_getinfo").on("click", function () {
+        var stu_name = $("#input_stu_name").val();
+        if (stu_name) {
+            $.showPreloader("加载中");
+            $.post("/info", {"stu_name": stu_name}, function (data) {
+                $.hidePreloader();
+                if (data["ret"] === 1) {
+                    cid = data["id"];
+                    $.each(data["data"], function(key, val){
+                        $("#" + key).html(val);
+                    });
+                    if (data["data"]["vat_invoice"].trim() === "") {
+                        $("invoice_type").html("普通发票");
+                        $("#div_vat").hide();
+                    } else {
+                        $("#invoice_type").html("专用发票");
+                    }
+                    $.router.loadPage("#info");
+                } else {
+                    $.toast("未找到改用户");
+                }
+            }, "json");
+        } else {
+            $.toast("请输入姓名");
+        }
+    });
+</script>
 </body>
 </html>
