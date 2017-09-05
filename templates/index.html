@@ -163,6 +163,10 @@
                     $.each(data["data"], function(key, val){
                         $("#" + key).html(val);
                     });
+                    if (data["attendance"] === 1) {
+                        $("#btn_checkin").addClass("disabled");
+                        $("#btn_checkin").html("已签到")
+                    }
                     if (data["data"]["vat_invoice"].trim() === "") {
                         $("#invoice_type").html("普通发票");
                         $("#div_vat").hide();
@@ -185,7 +189,7 @@
             if (data["ret"] === 1) {
                 $.alert("签到成功，请关闭本页面")
             } else {
-                $.toast("签到失败，请重试")
+                $.toast("您已签到，无需重复签到")
             }
         }, "json");
     })
