@@ -140,7 +140,8 @@
                 <div class="row">
                     <div class="col-50"><a href="#home" class="button button-big button-fill button-danger back">返回</a>
                     </div>
-                    <div class="col-50"><a href="#" class="button button-big button-fill button-success" id="btn_checkin">签到</a>
+                    <div class="col-50"><a href="#" class="button button-big button-fill button-success"
+                                           id="btn_checkin">签到</a>
                     </div>
                 </div>
             </div>
@@ -160,7 +161,7 @@
                 $.hidePreloader();
                 if (data["ret"] === 1) {
                     cid = data["id"];
-                    $.each(data["data"], function(key, val){
+                    $.each(data["data"], function (key, val) {
                         $("#" + key).html(val);
                     });
                     if (data["attendance"] === 1) {
@@ -182,18 +183,20 @@
             $.toast("请输入姓名");
         }
     });
-    $("#btn_checkin").on("click", function(){
-        $.showPreloader("加载中");
-        $.post("/checkin", {"id": cid}, function(data){
-            $.hidePreloader();
-            if (data["ret"] === 1) {
-                $("#btn_checkin").addClass("disabled");
-                $("#btn_checkin").html("已签到");
-                $.alert("签到成功，请关闭本页面")
-            } else {
-                $.toast("您已签到，无需重复签到");
-            }
-        }, "json");
+    $("#btn_checkin").on("click", function () {
+        if (!$("#btn_checkin").hasClass("disabled")) {
+            $.showPreloader("加载中");
+            $.post("/checkin", {"id": cid}, function (data) {
+                $.hidePreloader();
+                if (data["ret"] === 1) {
+                    $("#btn_checkin").addClass("disabled");
+                    $("#btn_checkin").html("已签到");
+                    $.alert("签到成功，请关闭本页面")
+                } else {
+                    $.toast("您已签到，无需重复签到");
+                }
+            }, "json");
+        }
     })
 </script>
 </body>
