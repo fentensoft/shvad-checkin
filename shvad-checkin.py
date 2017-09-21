@@ -32,11 +32,10 @@ def getpayment():
 @app.route("/confirmpayment", methods=["POST"])
 def confirmpayment():
     cid = request.form.get("id")
-    address = request.form.get("address").strip()
     if cid:
         conn = mysql.get_db()
         cur = conn.cursor()
-        cur.execute("UPDATE attend SET paid=1,address=%s WHERE id=%s;", (address, cid))
+        cur.execute("UPDATE attend SET paid=1 WHERE id=%s;", address)
         conn.commit()
         if cur.rowcount == 1:
             return '{"ret": 1}'
@@ -74,10 +73,11 @@ def info():
 @app.route("/checkin", methods=["POST"])
 def checkin():
     cid = request.form.get("id")
+    address = request.form.get("address").strip()
     if cid:
         conn = mysql.get_db()
         cur = DictCursor(conn)
-        cur.execute("UPDATE attend SET attendance=1 WHERE id=%s;", cid)
+        cur.execute("UPDATE attend SET attendance=1,address=%s WHERE id=%s;", (address, cid))
         conn.commit()
         if cur.rowcount == 1:
             return '{"ret": 1}'
