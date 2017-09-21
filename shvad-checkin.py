@@ -32,10 +32,11 @@ def getpayment():
 @app.route("/confirmpayment", methods=["POST"])
 def confirmpayment():
     cid = request.form.get("id")
+    address = request.form.get("address").strip()
     if cid:
         conn = mysql.get_db()
         cur = conn.cursor()
-        cur.execute("UPDATE attend SET paid=1 WHERE id=%s;", cid)
+        cur.execute("UPDATE attend SET paid=1,address=%s WHERE id=%s;", (address, cid))
         conn.commit()
         if cur.rowcount == 1:
             return '{"ret": 1}'
@@ -59,7 +60,7 @@ def info():
             for item in data:
                 if isinstance(data[item], str):
                     data[item] = data[item].strip().replace("\n", "<br/>")
-                    if (item != "vat_invoice") and (data[item] == ""):
+                    if (item != "vat_invoice") and (item != "address") and (data[item] == ""):
                         data[item] = "无"
             result["data"] = data
             result["ret"] = 1

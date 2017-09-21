@@ -134,10 +134,34 @@
                 <div class="row">
                     <div class="col-50"><a href="#home" class="button button-big button-fill button-danger back">返回</a>
                     </div>
-                    <div class="col-50"><a href="#" class="button button-big button-fill button-success"
-                                           id="btn_checkin">签到</a>
+                    <div class="col-50">
+                        <a href="#checkin" class="button button-big button-fill button-success" id="btn_to_checkin">下一步</a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="checkin">
+        <header class="bar bar-nav">
+            <h1 class="title">请填写发票邮寄地址</h1>
+        </header>
+        <div class="content">
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">发票邮寄地址</div>
+                                <div class="item-input">
+                                    <textarea id="address"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block">
+                <a href="#" class="button button-big button-fill button-success" id="btn_checkin">签到</a>
             </div>
         </div>
     </div>
@@ -155,6 +179,8 @@
                 $.hidePreloader();
                 if (data["ret"] === 1) {
                     cid = data["id"];
+                    $("#address").val(data["data"]["address"]);
+                    delete data["data"]["address"];
                     $.each(data["data"], function (key, val) {
                         $("#" + key).html(val);
                     });
@@ -183,7 +209,7 @@
     $("#btn_checkin").on("click", function () {
         if (!$("#btn_checkin").hasClass("disabled")) {
             $.showPreloader("加载中");
-            $.post("/checkin", {"id": cid}, function (data) {
+            $.post("/checkin", {"id": cid, "address": $("address").val()}, function (data) {
                 $.hidePreloader();
                 if (data["ret"] === 1) {
                     $("#btn_checkin").addClass("disabled");
