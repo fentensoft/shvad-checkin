@@ -25,7 +25,6 @@
         <thead>
         <tr>
             <th>姓名</th>
-            <th>折扣</th>
             <th>价格</th>
             <th>操作</th>
         </tr>
@@ -33,7 +32,6 @@
         <tbody>
         <tr v-for="user in users">
             <td v-text="user.stu_name"></td>
-            <td v-text="user.discount"></td>
             <td v-text="user.price"></td>
             <td>
                 <button class="layui-btn" v-bind:user-name="user.stu_name" v-bind:user-id="user.id" onclick="pay(this)">
