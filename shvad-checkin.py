@@ -58,7 +58,9 @@ def info():
             result["attendance"] = data.pop("attendance")
             for item in data:
                 if isinstance(data[item], str):
-                    data[item] = data[item].strip().replace("\n", "<br/>")
+                    data[item] = data[item].strip()
+                    if item != "address":
+                        data[item] = data[item].replace("\n", "<br/>")
                     if (item != "vat_invoice") and (item != "address") and (data[item] == ""):
                         data[item] = "无"
             result["data"] = data
