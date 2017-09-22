@@ -35,7 +35,7 @@ def confirmpayment():
     if cid:
         conn = mysql.get_db()
         cur = conn.cursor()
-        cur.execute("UPDATE attend SET paid=1 WHERE id=%s;", address)
+        cur.execute("UPDATE attend SET paid=1 WHERE id=%s;", cid)
         conn.commit()
         if cur.rowcount == 1:
             return '{"ret": 1}'
