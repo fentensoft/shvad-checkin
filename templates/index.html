@@ -23,7 +23,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">姓名</div>
                                 <div class="item-input">
-                                    <input type="text" placeholder="请输入您的姓名" id="input_stu_name">
+                                    <input type="text" placeholder="请输入您的姓名" id="i_stu_name">
                                     <input type="hidden" id="id">
                                 </div>
                             </div>
@@ -36,106 +36,41 @@
             </div>
         </div>
     </div>
-    <div class="page" id="info">
+    <div class="page" id="info">-a
         <header class="bar bar-nav">
             <h1 class='title'>请确认您的信息</h1>
         </header>
         <div class="content">
-            <div class="content-block-title">个人信息</div>
-            <div class="list-block">
-                <ul>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">姓名</div>
-                            <div class="item-after" id="stu_name"></div>
+            {% for block in ddl[0] %}
+                <div class="content-block-title">{{ block.category }}</div>
+                {% for card in block.cards %}
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-content-inner" id="{{ card.col_name }}"></div>
                         </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">电话</div>
-                            <div class="item-after" id="stu_phone"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">邮箱</div>
-                            <div class="item-after" id="stu_email"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">单位</div>
-                            <div class="item-after" id="stu_unit"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">职务</div>
-                            <div class="item-after" id="stu_job"></div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="content-block-title">费用信息</div>
-            <div class="list-block">
-                <ul>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">模块</div>
-                            <div class="item-after" id="module"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">价格</div>
-                            <div class="item-after" id="price"></div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="content-block-title">发票信息</div>
-            <div class="list-block">
-                <ul>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">发票类型</div>
-                            <div class="item-after" id="invoice_type"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">发票抬头</div>
-                            <div class="item-after" id="invoice_title"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">开票项目</div>
-                            <div class="item-after" id="invoice_item"></div>
-                        </div>
-                    </li>
-                    <li class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title">税号</div>
-                            <div class="item-after" id="tax_no"></div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div id="div_vat">
-                <div class="content-block-title">增值税专用发票信息</div>
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-content-inner" id="vat_invoice"></div>
                     </div>
+                {% endfor %}
+                <div class="list-block">
+                    <ul>
+                        {% for row in block.rows %}
+                            <li class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">{{ row.col_label }}</div>
+                                    <div class="item-after" id="{{ row.col_name }}"></div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-            </div>
+            {% endfor %}
             <div class="content-block">
                 <div class="row">
                     <div class="col-50"><a href="#home" class="button button-big button-fill button-danger back">返回</a>
                     </div>
+                    {% if ddl[1] %}
                     <div class="col-50">
-                        <a href="#checkin" class="button button-big button-fill button-success" id="btn_to_checkin">下一步</a>
+                        <a href="#checkin" class="button button-big button-fill button-success"
+                           id="btn_to_checkin">下一步</a>
                     </div>
                 </div>
             </div>
@@ -143,24 +78,38 @@
     </div>
     <div class="page" id="checkin">
         <header class="bar bar-nav">
-            <h1 class="title">请填写发票邮寄地址</h1>
+            <h1 class="title">请填写以下信息</h1>
         </header>
         <div class="content">
-            <div class="list-block">
-                <ul>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">发票邮寄地址</div>
-                                <div class="item-input">
-                                    <textarea id="address"></textarea>
+            {% for block in ddl[1] %}
+                <div class="content-block-title">{{ block.category }}</div>
+                <div class="list-block">
+                    <ul>
+                        {% for row in block.rows %}
+                            <li class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">{{ row.col_label }}</div>
+                                    <div class="item-input">
+                                        <input type="text" id="input_{{ row.col_name }}">
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                            </li>
+                        {% endfor %}
+                        {% for card in block.cards %}
+                            <li class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">{{ card.col_label }}</div>
+                                    <div class="item-input">
+                                        <textarea id="input_{{ card.col_name }}"></textarea>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
             <div class="content-block">
+                {% endif %}
                 <a href="#" class="button button-big button-fill button-success" id="btn_checkin">签到</a>
             </div>
         </div>
@@ -170,17 +119,24 @@
 <script type='text/javascript' src='https://cdn.bootcss.com/light7/0.4.3/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript">
     var cid = -1;
+    var get_inputs = function() {
+        eles = $("[id^=input_]");
+        ret = [];
+        for (var i = 0; i < eles.length; i++) {
+            ret.push({"name": $(eles[i]).attr("id"), "value": $(eles[i]).val()});
+        }
+        ret.push({"name": "id", "value": cid});
+        return ret;
+    }
     $.init();
     $("#btn_getinfo").on("click", function () {
-        var stu_name = $("#input_stu_name").val();
+        var stu_name = $("#i_stu_name").val();
         if (stu_name) {
             $.showPreloader("加载中");
             $.post("/info", {"stu_name": stu_name}, function (data) {
                 $.hidePreloader();
                 if (data["ret"] === 1) {
                     cid = data["id"];
-                    $("#address").val(data["data"]["address"]);
-                    delete data["data"]["address"];
                     $.each(data["data"], function (key, val) {
                         $("#" + key).html(val);
                     });
@@ -190,12 +146,6 @@
                     } else {
                         $("#btn_checkin").removeClass("disabled");
                         $("#btn_checkin").html("签到");
-                    }
-                    if (data["data"]["vat_invoice"].trim() === "") {
-                        $("#invoice_type").html("普通发票");
-                        $("#div_vat").hide();
-                    } else {
-                        $("#invoice_type").html("专用发票");
                     }
                     $.router.loadPage("#info");
                 } else {
@@ -209,7 +159,7 @@
     $("#btn_checkin").on("click", function () {
         if (!$("#btn_checkin").hasClass("disabled")) {
             $.showPreloader("加载中");
-            $.post("/checkin", {"id": cid, "address": $("#address").val()}, function (data) {
+            $.post("/checkin", get_inputs(), function (data) {
                 $.hidePreloader();
                 if (data["ret"] === 1) {
                     $("#btn_checkin").addClass("disabled");
