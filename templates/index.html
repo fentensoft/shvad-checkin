@@ -110,7 +110,11 @@
             {% endfor %}
             <div class="content-block">
                 {% endif %}
+                {% if ddl[1] %}
                 <a href="#" class="button button-big button-fill button-success" id="btn_checkin">签到</a>
+                {% else %}
+                <div class="col-50"><a href="#" class="button button-big button-fill button-success" id="btn_checkin">签到</a></div>
+                {% endif %}
             </div>
         </div>
     </div>
