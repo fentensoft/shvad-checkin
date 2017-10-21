@@ -19,9 +19,22 @@ def index():
     return render_template('index.html', ddl=get_ddl())
 
 
+@app.route('/reset')
+def reset():
+    conn = mysql.get_db()
+    cur = conn.cursor()
+    cur.execute("UPDATE attend SET attendance=0;")
+    conn.commit()
+    return "1"
+
 @app.route("/payment")
 def payment():
     return render_template("payment.html")
+
+
+@app.route("/admin")
+def admin():
+    return render_template("admin.html")
 
 
 @app.route("/getpayment")
@@ -29,6 +42,13 @@ def getpayment():
     cur = DictCursor(mysql.get_db())
     cur.execute("SELECT id,stu_name,price FROM attend WHERE paid=0 AND attendance=1;")
     return dumps(cur.fetchall(), ensure_ascii=False)
+
+
+@app.route("/getlist")
+def getlist():
+    cur = DictCursor(mysql.get_db())
+    cur.execute("SELECT * FROM attend;")
+    return jsonify(cur.fetchall())
 
 
 @app.route("/confirmpayment", methods=["POST"])
@@ -113,7 +133,6 @@ def checkin():
         return jsonify({"ret": -1})
 
 
-@app.route("/ge2ct_ddl")
 def get_ddl():
     conn = mysql.get_db()
     cur = conn.cursor()
