@@ -1,12 +1,14 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flaskext.mysql import MySQL
 from json import dumps
 from pymysql.cursors import DictCursor
 import re
+import pandas as pd
+import datetime
 
 app = Flask(__name__)
-app.config["MYSQL_DATABASE_HOST"] = "sh-cdb-a4wyqtqq.sql.tencentcdb.com"
-app.config["MYSQL_DATABASE_PORT"] = 63897
+app.config["MYSQL_DATABASE_HOST"] = "172.17.0.14"
+app.config["MYSQL_DATABASE_PORT"] = 3306
 app.config["MYSQL_DATABASE_USER"] = "root"
 app.config["MYSQL_DATABASE_PASSWORD"] = "tony989@pple"
 app.config["MYSQL_DATABASE_DB"] = "shvad"
@@ -26,6 +28,7 @@ def reset():
     cur.execute("UPDATE attend SET attendance=0;")
     conn.commit()
     return "1"
+
 
 @app.route("/payment")
 def payment():
@@ -49,6 +52,14 @@ def getlist():
     cur = DictCursor(mysql.get_db())
     cur.execute("SELECT * FROM attend;")
     return jsonify(cur.fetchall())
+
+
+@app.route("/getexcel")
+def getexcel():
+    conn = mysql.get_db()
+    df = pd.read_sql("SELECT * FROM attend;", conn, index_col="id")
+    df.to_excel("tmp.xlsx")
+    return send_from_directory("./", "tmp.xlsx", attachment_filename="attend_{}.xlsx".format(datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")))
 
 
 @app.route("/confirmpayment", methods=["POST"])
