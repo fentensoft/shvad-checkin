@@ -57,7 +57,7 @@ def getlist():
 @app.route("/getexcel")
 def getexcel():
     conn = mysql.get_db()
-    df = pd.read_sql("SELECT * FROM attend;", conn, index_col="id")
+    df = pd.read_sql("SELECT id,stu_name,stu_gender,stu_unit,attendance FROM attend;", conn, index_col="id")
     df.to_excel("tmp.xlsx")
     return send_from_directory("./", "tmp.xlsx", as_attachment=True, attachment_filename="attend_{}.xlsx".format(datetime.datetime.now().strftime("%Y-%m-%d-%H:%M")))
 
