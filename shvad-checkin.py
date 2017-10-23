@@ -18,7 +18,13 @@ mysql.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html', ddl=get_ddl())
+    conn = mysql.get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT config_value FROM config WHERE config_name='index_title';")
+    title = cur.fetchone()[0]
+    cur.execute("SELECT config_value FROM config WHERE config_name='index_prompt';")
+    prompt = cur.fetchone()[0]
+    return render_template('index.html', ddl=get_ddl(), title=title, prompt=prompt)
 
 
 @app.route('/reset')
