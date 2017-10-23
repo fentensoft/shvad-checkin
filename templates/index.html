@@ -121,8 +121,12 @@
 </div>
 <script type='text/javascript' src='https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='https://cdn.bootcss.com/light7/0.4.3/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/client.min.js' charset='utf-8'></script>
 <script type="text/javascript">
     var cid = -1;
+    var client = new ClientJS();
+    var fp = client.getFingerprint();
+    console.log(fp);
     var get_inputs = function() {
         eles = $("[id^=input_]");
         ret = [];
@@ -130,6 +134,7 @@
             ret.push({"name": $(eles[i]).attr("id"), "value": $(eles[i]).val()});
         }
         ret.push({"name": "id", "value": cid});
+        ret.push({"name": "fp", "value": fp});
         return ret;
     }
     $.init();
@@ -137,7 +142,7 @@
         var stu_name = $("#i_stu_name").val();
         if (stu_name) {
             $.showPreloader("加载中");
-            $.post("/info", {"stu_name": stu_name}, function (data) {
+            $.post("/info", {"stu_name": stu_name, "fp": fp}, function (data) {
                 $.hidePreloader();
                 if (data["ret"] === 1) {
                     cid = data["id"];
@@ -152,11 +157,13 @@
                         $("#btn_checkin").html("签到");
                     }
                     $.router.loadPage("#info");
+                } else if (data["ret"] == -2) {
+                    $.toast("同一设备仅能签到一次！");
                 } else {
                     $.toast("未找到该用户");
                 }
             }, "json");
-        } else {
+        } else  {
             $.toast("请输入姓名");
         }
     });

@@ -25,7 +25,7 @@ def index():
 def reset():
     conn = mysql.get_db()
     cur = conn.cursor()
-    cur.execute("UPDATE attend SET attendance=0;")
+    cur.execute("UPDATE attend SET attendance=0, fp='';")
     conn.commit()
     return "1"
 
@@ -91,13 +91,18 @@ def get_column_config():
 @app.route('/info', methods=["POST"])
 def info():
     stu_name = request.form.get("stu_name")
-    if stu_name:
+    fp = request.form.get("fp")
+    if stu_name and fp:
         result = {}
         cur = DictCursor(mysql.get_db())
+        cur.execute("SELECT COUNT(*) AS c FROM attend WHERE fp=%s;", fp)
+        if cur.fetchone()["c"] > 0:
+            return jsonify({"ret": -2})
         cur.execute("SELECT * FROM attend WHERE stu_name=%s;", stu_name)
         data = cur.fetchone()
         col_config = get_column_config()
         if data:
+            del data["fp"]
             result["id"] = data.pop("id")
             result["attendance"] = data.pop("attendance")
             new_data = {}
@@ -133,8 +138,8 @@ def checkin():
             if item.startswith("input_"):
                 varlist += "," + item.replace("input_", "") + "=%s"
                 val_tuple += (request.form[item], )
-        val_tuple += (cid, )
-        cur.execute("UPDATE attend SET attendance=1" + varlist + " WHERE id=%s;", val_tuple)
+        val_tuple += (request.form.get("fp"), cid, )
+        cur.execute("UPDATE attend SET attendance=1" + varlist + ",fp=%s WHERE id=%s;", val_tuple)
         conn.commit()
         if cur.rowcount == 1:
             return jsonify({"ret": 1})
