@@ -15,6 +15,7 @@
         <header class="bar bar-nav">
             <h1 class="title">{{ prompt }}</h1>
         </header>
+        {% if checkin_avail %}
         <div class="content">
             <div class="list-block">
                 <ul>
@@ -117,6 +118,11 @@
                 {% endif %}
             </div>
         </div>
+        {% else %}
+            <div class="content" style="text-align:center;">
+             <h3 class="icon icon-clock">不在规定时间内，无法签到</h3>
+            </div>
+        {% endif %}
     </div>
 </div>
 <script type='text/javascript' src='https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js' charset='utf-8'></script>

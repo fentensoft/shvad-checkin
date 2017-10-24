@@ -24,7 +24,11 @@ def index():
     title = cur.fetchone()[0]
     cur.execute("SELECT config_value FROM config WHERE config_name='index_prompt';")
     prompt = cur.fetchone()[0]
-    return render_template('index.html', ddl=get_ddl(), title=title, prompt=prompt)
+    cur.execute("SELECT config_value FROM config WHERE config_name='checkin_start';")
+    start = datetime.datetime.strptime(cur.fetchone()[0], "%Y-%m-%d %H:%M")
+    cur.execute("SELECT config_value FROM config WHERE config_name='checkin_stop';")
+    end = datetime.datetime.strptime(cur.fetchone()[0], "%Y-%m-%d %H:%M")
+    return render_template('index.html', ddl=get_ddl(), title=title, prompt=prompt, checkin_avail=(start <= datetime.datetime.now() <= end))
 
 
 @app.route('/reset')
