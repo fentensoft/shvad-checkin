@@ -5,73 +5,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>签到名单</title>
     <link rel="stylesheet" href="/static/layui.css">
+    <link rel="stylesheet" href="/static/css/flatpickr.min.css">
 </head>
 <body>
 <ul class="layui-nav">
     <li class="layui-nav-item">签到名单</li>
-    <li class="layui-nav-item"><a href="/getexcel" >下载为Excel</a></li>
+    <li class="layui-nav-item"><a href="/getexcel">下载为Excel</a></li>
     <li class="layui-nav-item layui-layout-right">
         <button class="layui-btn layui-btn-normal" onclick="reset()">重置</button>
         <span>&nbsp;</span>
     </li>
 </ul>
 <div class="layui-container">
-    <table class="layui-table" id="app">
-        <colgroup>
-            <col width="150">
-            <col>
-            <col width="150">
-            <col width="100">
-        </colgroup>
-        <thead>
-        <tr>
-            <th>姓名</th>
-            <th>单位</th>
-            <th>性别</th>
-            <th>签到状态</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="user in users">
-            <td v-text="user.stu_name"></td>
-            <td v-text="user.stu_unit"></td>
-            <td v-text="user.stu_gender"></td>
-            <td v-if="user.attendance == 0" style="background-color:#FF9966">未签到</td>
-            <td v-if="user.attendance == 1" style="background-color:#00CC99">已签到</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">用户管理</li>
+            <li>签到时间设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-table" id="app">
+                    <colgroup>
+                        <col width="150">
+                        <col>
+                        <col width="150">
+                        <col width="100">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>单位</th>
+                        <th>性别</th>
+                        <th>签到状态</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="user in users">
+                        <td v-text="user.stu_name"></td>
+                        <td v-text="user.stu_unit"></td>
+                        <td v-text="user.stu_gender"></td>
+                        <td v-if="user.attendance == 0" style="background-color:#FF9966">未签到</td>
+                        <td v-if="user.attendance == 1" style="background-color:#00CC99">已签到</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required lay-verify="required" placeholder="开始时间"
+                               autocomplete="off" class="layui-input" id="checkin_start">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required lay-verify="required" placeholder="结束时间"
+                               autocomplete="off" class="layui-input" id="checkin_stop">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" onclick="save_time();">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script type='text/javascript' src='/static/vue.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/layui.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/js/flatpickr.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/vue-resource.min.js' charset='utf-8'></script>
+<script type='text/javascript' src="/static/js/zh.js"></script>
 <script type="text/javascript">
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    var save_time = function () {
+        Vue.http.post("/timeconfig", {
+            "checkin_start": document.getElementById("checkin_start").value,
+            "checkin_stop": document.getElementById("checkin_stop").value
+        }, {emulateJSON: true})
+            .then(function (response) {
+                if (response.body["ret"] == 1) {
+                    alert("保存成功！")
+                }
+            });
+        return false;
+    };
+    var picker_start = flatpickr("#checkin_start", {
+        enableTime: true,
+        locale: "zh",
+        time_24hr: true
+    });
+    var picker_stop = flatpickr("#checkin_stop", {
+        enableTime: true,
+        locale: "zh",
+        time_24hr: true
+    });
     var refresh_data = function () {
         Vue.http.get("/getlist").then(function (response) {
             app.users = response.body;
         });
     };
-    var reset = function() {
+    var reset = function () {
         if (confirm("确认重置？")) {
             Vue.http.get("/reset").then(function (response) {
                 refresh_data();
             });
-        };
+        }
+        ;
     };
     var app = new Vue({
         el: '#app',
         data: {
             users: []
         },
-        mounted: function() {
+        mounted: function () {
             refresh_data();
-            setInterval("refresh_data()", 5000);
-        },
-        ready: function () {
-            refresh_data();
+            Vue.http.get("/timeconfig").then(function (response) {
+                picker_start.setDate(response.body["checkin_start"]);
+                picker_stop.setDate(response.body["checkin_stop"]);
+            });
             setInterval("refresh_data()", 5000);
         }
     });
 </script>
 </body>
-</html>s
+</html>

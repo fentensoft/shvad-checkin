@@ -31,6 +31,25 @@ def index():
     return render_template('index.html', ddl=get_ddl(), title=title, prompt=prompt, checkin_avail=(start <= datetime.datetime.now() <= end))
 
 
+@app.route('/timeconfig', methods=['GET', 'POST'])
+def timeconfig():
+    conn = mysql.get_db()
+    cur = conn.cursor()
+    if request.method == 'GET':
+        cur.execute("SELECT config_value FROM config WHERE config_name='checkin_start';")
+        start = cur.fetchone()[0]
+        cur.execute("SELECT config_value FROM config WHERE config_name='checkin_stop';")
+        stop = cur.fetchone()[0]
+        return jsonify({"checkin_start": start, "checkin_stop": stop})
+    else:
+        start = request.form.get("checkin_start")
+        stop = request.form.get("checkin_stop")
+        cur.execute("UPDATE config SET config_value=%s WHERE config_name='checkin_start';", start)
+        cur.execute("UPDATE config SET config_value=%s WHERE config_name='checkin_stop';", stop)
+        conn.commit()
+        return jsonify({"ret": 1})
+
+
 @app.route('/reset')
 def reset():
     conn = mysql.get_db()
