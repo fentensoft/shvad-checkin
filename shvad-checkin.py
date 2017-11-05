@@ -54,7 +54,7 @@ def timeconfig():
 def reset():
     conn = mysql.get_db()
     cur = conn.cursor()
-    cur.execute("UPDATE attend SET attendance=0, fp='';")
+    cur.execute("UPDATE attend SET attendance=0, paid=0, fp='';")
     conn.commit()
     return "1"
 
