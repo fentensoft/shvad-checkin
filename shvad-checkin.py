@@ -72,7 +72,7 @@ def admin():
 @app.route("/getpayment")
 def getpayment():
     cur = DictCursor(mysql.get_db())
-    cur.execute("SELECT id,stu_name,price FROM attend WHERE paid=0 AND attendance=1;")
+    cur.execute("SELECT id,stu_name,stu_unit,price FROM attend WHERE paid=0 AND attendance=1;")
     return dumps(cur.fetchall(), ensure_ascii=False)
 
 
