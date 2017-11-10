@@ -166,7 +166,7 @@
     var pay = function (sender) {
         if (confirm("确认 " + sender.getAttribute("user-name") + " 交费？")) {
             Vue.http.post("/confirmpayment", {id: sender.getAttribute("user-id")}, {emulateJSON: true}).then(function (response) {
-                refresh_data()
+                refresh_pay()
             })
         }
     };
