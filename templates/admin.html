@@ -20,6 +20,7 @@
     <div class="layui-tab">
         <ul class="layui-tab-title">
             <li class="layui-this">用户管理</li>
+            <li>付费管理</li>
             <li>签到时间设置</li>
         </ul>
         <div class="layui-tab-content">
@@ -47,6 +48,36 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-table" id="app1">
+        <colgroup>
+            <col width="150">
+            <col width="250">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>姓名</th>
+            <th>单位</th>
+            <th>价格</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="user in users">
+            <td v-text="user.stu_name"></td>
+            <td v-text="user.stu_unit"></td>
+            <td v-text="user.price"></td>
+            <td>
+                <button class="layui-btn" v-bind:user-name="user.stu_name" v-bind:user-id="user.id" onclick="pay(this)">
+                    确认交费
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
             </div>
             <div class="layui-tab-item">
                 <div class="layui-form-item">
@@ -130,6 +161,28 @@
                 picker_stop.setDate(response.body["checkin_stop"]);
             });
             setInterval("refresh_data()", 5000);
+        }
+    });
+    var pay = function (sender) {
+        if (confirm("确认 " + sender.getAttribute("user-name") + " 交费？")) {
+            Vue.http.post("/confirmpayment", {id: sender.getAttribute("user-id")}, {emulateJSON: true}).then(function (response) {
+                refresh_data()
+            })
+        }
+    };
+    var refresh_pay = function () {
+        Vue.http.get("/getpayment").then(function (response) {
+            app1.users = response.body;
+        });
+    };
+    var app1 = new Vue({
+        el: '#app1',
+        data: {
+            users: []
+        },
+        mounted: function() {
+            refresh_pay();
+            setInterval("refresh_pay()", 5000);
         }
     });
 </script>
